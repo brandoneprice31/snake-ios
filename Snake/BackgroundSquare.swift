@@ -12,7 +12,7 @@ class BackgroundSquare: SKSpriteNode {
     
     init(width: CGFloat, height: CGFloat, xMin: CGFloat, yMin: CGFloat) {
         let texture = SKTexture(imageNamed: "Block")
-        super.init(texture: texture, color: UIColor.whiteColor(), size: texture.size())
+        super.init(texture: texture, color: UIColor.white, size: texture.size())
         self.position = CGPoint(x: CGFloat(arc4random_uniform(UInt32(width))) + xMin, y: CGFloat(arc4random_uniform(UInt32(height))) + yMin)
         
         let len = CGFloat(Float(UInt32(width/20) + arc4random_uniform(UInt32(width/20))))
@@ -21,12 +21,12 @@ class BackgroundSquare: SKSpriteNode {
         self.alpha = 0.075
         
         // create fade in action
-        let FadeIn = SKAction.fadeOutWithDuration(1.0)
-        let Expand = SKAction.scaleBy(2.0, duration: 1.0)
+        let FadeIn = SKAction.fadeOut(withDuration: 1.0)
+        let Expand = SKAction.scale(by: 2.0, duration: 1.0)
         let Action = SKAction.group([FadeIn,Expand])
         
         let ActionDone = SKAction.removeFromParent()
-        self.runAction(SKAction.sequence([Action, ActionDone]))
+        self.run(SKAction.sequence([Action, ActionDone]))
     }
     
     required init(coder aDecoder: NSCoder) {

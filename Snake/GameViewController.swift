@@ -8,28 +8,28 @@
 
 import UIKit
 import SpriteKit
-import Parse
+import FBSDKCoreKit
 
 extension SKNode {
     class func unarchiveFromFile(file : String) -> SKNode? {
-        if let path = NSBundle.mainBundle().pathForResource(file, ofType: "sks") {
-            let sceneData = try! NSData(contentsOfFile: path, options: .DataReadingMappedIfSafe)
-            let archiver = NSKeyedUnarchiver(forReadingWithData: sceneData)
+        if let path = Bundle.main.path(forResource: file, ofType: "sks") {
+            let sceneData = try! NSData(contentsOfFile: path, options: .mappedIfSafe)
+            let archiver = NSKeyedUnarchiver(forReadingWith: sceneData as Data)
             
             archiver.setClass(self.classForKeyedUnarchiver(), forClassName: "SKScene")
             
-            let currentUser = PFUser.currentUser()
+            //let currentUser = PFUser.currentUser()
+            var currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             
             if currentUser == nil {
                 
-                let scene = archiver.decodeObjectForKey(NSKeyedArchiveRootObjectKey) as! LoginScene
+                let scene = archiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as! LoginScene
                 archiver.finishDecoding()
                 return scene
                 
-            }
-            else {
+            } else {
                 
-                let scene = archiver.decodeObjectForKey(NSKeyedArchiveRootObjectKey) as! MainMenuScene
+                let scene = archiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as! MainMenuScene
                 archiver.finishDecoding()
                 return scene
                 
@@ -42,15 +42,23 @@ extension SKNode {
     }
 }
 
-class GameViewController: UIViewController {
+var viewDelegate : UIViewController!
 
+class GameViewController: UIViewController {
+    
+    override func loadView() {
+        self.view = SKView(frame: UIScreen.main.bounds)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let currentUser = PFUser.currentUser()
+        viewDelegate = self
         
+        let currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
+
         if currentUser == nil {
-            if let scene = LoginScene.unarchiveFromFile("LoginScene") as? LoginScene {
+            if let scene = LoginScene.unarchiveFromFile(file: "LoginScene") as? LoginScene {
                 // Configure the view.
                 let skView = self.view as! SKView
                 skView.showsFPS = false
@@ -60,15 +68,13 @@ class GameViewController: UIViewController {
                 skView.ignoresSiblingOrder = true
                 
                 /* Set the scale mode to scale to fit the window */
-                scene.scaleMode = .ResizeFill
+                scene.scaleMode = .resizeFill
                 
                 skView.presentScene(scene)
             }
-        }
-        
-        else {
+        } else {
             
-            if let scene = MainMenuScene.unarchiveFromFile("MainMenuScene") as? MainMenuScene {
+            if let scene = MainMenuScene.unarchiveFromFile(file: "MainMenuScene") as? MainMenuScene {
                 // Configure the view.
                 let skView = self.view as! SKView
                 skView.showsFPS = false
@@ -78,34 +84,29 @@ class GameViewController: UIViewController {
                 skView.ignoresSiblingOrder = true
                 
                 /* Set the scale mode to scale to fit the window */
-                scene.scaleMode = .ResizeFill
+                scene.scaleMode = .resizeFill
                 
                 skView.presentScene(scene)
             }
             
         }
-        
     }
 
+    /*
     override func shouldAutorotate() -> Bool {
         return true
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
 
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return UIInterfaceOrientationMask.AllButUpsideDown
+        if UIDevice.currentDevice.userInterfaceIdiom == .Phone {
+            return UIInterfaceOrientationMask.allButUpsideDown
         } else {
-            return UIInterfaceOrientationMask.All
+            return UIInterfaceOrientationMask.all
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 
     override func prefersStatusBarHidden() -> Bool {
         return true
-    }
+    }*/
 }

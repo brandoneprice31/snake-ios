@@ -20,9 +20,9 @@ class ButtonNode: SKSpriteNode {
         Clicked = false
         self.position = Position
         self.LabelNode = SKLabelNode(text: Label)
-        LabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        LabelNode.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        LabelNode.fontColor = UIColor.blackColor()
+        LabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
+        LabelNode.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+        LabelNode.fontColor = UIColor.black
         LabelNode.zPosition = 1001
         LabelNode.fontSize = Size.height / 1.5
         self.zPosition = 1000

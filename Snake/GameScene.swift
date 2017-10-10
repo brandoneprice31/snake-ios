@@ -1,3 +1,7 @@
+
+
+
+
 //
 //  GameScene.swift
 //  Snake
@@ -7,7 +11,6 @@
 //
 
 import SpriteKit
-import Parse
 
 class GameScene: SKScene {
     
@@ -24,7 +27,7 @@ class GameScene: SKScene {
     var BlockHeight = CGFloat()
     var BlockWidth = CGFloat()
     var Direction = String()
-    var SnakeTimer = NSTimer()
+    var SnakeTimer = Timer()
     var FoodBlock1 = Food(Coordinate: CGPoint(x:0,y:0))
     var FoodBlock2 = Food(Coordinate: CGPoint(x:0,y:0))
     var FoodBlock3 = Food(Coordinate: CGPoint(x:0,y:0))
@@ -37,17 +40,17 @@ class GameScene: SKScene {
     var PlayAgainButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var MainMenuButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var GamePlaying = String()
-    var TimeInterval = NSTimeInterval()
+    var Time_Interval = TimeInterval()
     var DoubleTap = Int()
-    var DoubleTapTimer = NSTimer()
-    var defaults = NSUserDefaults()
+    var DoubleTapTimer = Timer()
+    var defaults = UserDefaults()
     var ScoreCounter = ScoreLabel(Text: "")
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to _view: SKView) {
         
         // MARK: - Set Up Background
-        self.backgroundColor = UIColor.whiteColor()
-        defaults = NSUserDefaults.standardUserDefaults()
+        self.backgroundColor = UIColor.white
+        defaults = UserDefaults.standard
         
         // MARK: - Set Up Constants
         self.Height = self.view!.frame.size.height
@@ -61,19 +64,19 @@ class GameScene: SKScene {
         self.DoubleTap = 0
         
         // Set Easy Mode if Never Set
-        if defaults.stringForKey("GameMode") == nil {
-            defaults.setObject("Easy", forKey: "GameMode")
+        if defaults.string(forKey: "GameMode") == nil {
+            defaults.set("Easy", forKey: "GameMode")
         }
 
-        if defaults.stringForKey("GameMode") == "Easy" {
+        if defaults.string(forKey: "GameMode") == "Easy" {
             self.BlockHeight = CGFloat(Int(Height/30)) + CGFloat(Int(Height/30) % 2)
             self.BlockWidth = CGFloat(Int(Width/30)) + CGFloat(Int(Width/30) % 2)
-            self.TimeInterval = NSTimeInterval(0.20)
+            self.Time_Interval = TimeInterval(0.20)
         }
         else {
             self.BlockHeight = CGFloat(Int(Height/19)) + CGFloat(Int(Height/19) % 2)
             self.BlockWidth = CGFloat(Int(Width/19)) + CGFloat(Int(Width/19) % 2)
-            self.TimeInterval = NSTimeInterval(0.15)
+            self.Time_Interval = TimeInterval(0.15)
         }
         
         self.Direction = "Left"
@@ -89,59 +92,59 @@ class GameScene: SKScene {
         }
         
         // MARK: - Set Up GameBoard
-        addBlock(CGPoint(x:BlockWidth/2.0,y:BlockHeight/2.0))
+        addBlock(Position: CGPoint(x:BlockWidth/2.0,y:BlockHeight/2.0))
         
-        SpawnFood(1)
-        SpawnFood(2)
-        SpawnFood(3)
+        SpawnFood(Num: 1)
+        SpawnFood(Num: 2)
+        SpawnFood(Num: 3)
         
         ScoreCounter.fontSize = 28
-        ScoreCounter.fontColor = UIColor.blackColor()
+        ScoreCounter.fontColor = UIColor.black
         ScoreCounter.text = "\(Score)"
         ScoreCounter.position = CGPoint(x: xMin + Width * 0.1, y: yMax - Width * 0.1)
         self.addChild(ScoreCounter)
         
         // MARK: - SnakeTimer function
-        SnakeTimer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: "MoveSnake", userInfo: nil, repeats: true)
+        SnakeTimer = Timer.scheduledTimer(timeInterval: Time_Interval, target: self, selector: #selector(GameScene.MoveSnake), userInfo: nil, repeats: true)
     }
     
     // MARK: - touches
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if GamePlaying == "Yes" {
             // Player Movement on Taps
             for touch in (touches ) {
-                let location = touch.locationInNode(self)
+                let location = touch.location(in: self)
                 
                 StartPoint = location
             }
         }
         else {
             for touch in (touches ) {
-                let location = touch.locationInNode(self)
+                let location = touch.location(in: self)
                 
-                if CheckTouchesBegan(location, ButtonList: [PlayAgainButton,MainMenuButton]) {
+                if CheckTouchesBegan(Location: location, ButtonList: [PlayAgainButton,MainMenuButton]) {
                     // don't do anything
                 }
             }
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if GamePlaying != "Yes" {
             for touch in (touches ) {
-                let location = touch.locationInNode(self)
+                let location = touch.location(in: self)
                 
-                if CheckTouchesMoved(location, ButtonList: [PlayAgainButton,MainMenuButton]) {
+                if CheckTouchesMoved(Location: location, ButtonList: [PlayAgainButton,MainMenuButton]) {
                     DoubleTap = 0
                 }
             }
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             if GamePlaying == "Yes" {
                 EndPoint = location
                 
@@ -166,7 +169,7 @@ class GameScene: SKScene {
                 }
                 else if abs(UpAxis) <= 15 && abs(RightAxis) <= 15 {
                     DoubleTap += 1
-                    DoubleTapTimer = NSTimer.scheduledTimerWithTimeInterval(0.75, target: self, selector: "NoDoubleTap", userInfo: nil, repeats: false)
+                    DoubleTapTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: "NoDoubleTap", userInfo: nil, repeats: false)
                 }
                 
                 if DoubleTap == 2 {
@@ -176,11 +179,11 @@ class GameScene: SKScene {
             else {
                 
                 if GamePlaying == "Paused" {
-                    CheckTouchesLifted(location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [ContinueGame,OpenMainMenu])
+                    CheckTouchesLifted(Location: location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [ContinueGame,OpenMainMenu])
                 }
                 else {
                     
-                    CheckTouchesLifted(location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [PlayAgain,OpenMainMenu])
+                    CheckTouchesLifted(Location: location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [PlayAgain,OpenMainMenu])
                 }
             }
         }
@@ -190,7 +193,7 @@ class GameScene: SKScene {
     func addBlock (Position: CGPoint) {
         
         for block in BlockArray {
-            block.BlockNumChange(block.BlockNumber + 1, NewTotalBlocks: CGFloat(BlockArray.count + 1))
+            block.BlockNumChange(NewBlockNum: block.BlockNumber + 1, NewTotalBlocks: CGFloat(BlockArray.count + 1))
             block.size.width = Width / BlockWidth - 2.0
             block.size.height = Height / BlockHeight - 2.0
         }
@@ -201,8 +204,8 @@ class GameScene: SKScene {
         let new_block = Block(Coordinate: CGPoint(x:x,y:y), BlockNum: 0, TotalBlocks: CGFloat(BlockArray.count + 1))
         new_block.size.width = Width / BlockWidth - 2.0
         new_block.size.height = Height / BlockHeight - 2.0
-        BlockArray.insert(new_block, atIndex: 0)
-        new_block.position = GetBlocksRealPosition(new_block.Coordinates)
+        BlockArray.insert(new_block, at: 0)
+        new_block.position = GetBlocksRealPosition(Position: new_block.Coordinates)
         self.addChild(new_block)
     }
     
@@ -213,7 +216,7 @@ class GameScene: SKScene {
         BlockArray.removeLast()
         
         for block in BlockArray {
-            block.BlockNumChange(block.BlockNumber, NewTotalBlocks: CGFloat(BlockArray.count))
+            block.BlockNumChange(NewBlockNum: block.BlockNumber, NewTotalBlocks: CGFloat(BlockArray.count))
         }
     }
     
@@ -234,40 +237,40 @@ class GameScene: SKScene {
             if Direction == "Left" {
                 let NewX = BlockArray[0].Coordinates.x - 1
                 if NewX == -1 {
-                    addBlock(CGPoint(x: BlockWidth - 1, y: BlockArray[0].Coordinates.y))
+                    addBlock(Position: CGPoint(x: BlockWidth - 1, y: BlockArray[0].Coordinates.y))
                 }
                 else {
-                    addBlock(CGPoint(x: NewX, y: BlockArray[0].Coordinates.y))
+                    addBlock(Position: CGPoint(x: NewX, y: BlockArray[0].Coordinates.y))
                 }
                 PreviousDirection = "Left"
             }
             else if Direction == "Right" {
                 let NewX = BlockArray[0].Coordinates.x + 1
                 if NewX == BlockWidth {
-                    addBlock(CGPoint(x: 0, y: BlockArray[0].Coordinates.y))
+                    addBlock(Position: CGPoint(x: 0, y: BlockArray[0].Coordinates.y))
                 }
                 else {
-                    addBlock(CGPoint(x: NewX, y: BlockArray[0].Coordinates.y))
+                    addBlock(Position: CGPoint(x: NewX, y: BlockArray[0].Coordinates.y))
                 }
                 PreviousDirection = "Right"
             }
             else if Direction == "Up" {
                 let NewY = BlockArray[0].Coordinates.y + 1
                 if NewY == BlockHeight {
-                    addBlock(CGPoint(x: BlockArray[0].Coordinates.x, y: 0))
+                    addBlock(Position: CGPoint(x: BlockArray[0].Coordinates.x, y: 0))
                 }
                 else {
-                    addBlock(CGPoint(x: BlockArray[0].Coordinates.x, y: NewY))
+                    addBlock(Position: CGPoint(x: BlockArray[0].Coordinates.x, y: NewY))
                 }
                 PreviousDirection = "Up"
             }
             else {
                 let NewY = BlockArray[0].Coordinates.y - 1
                 if NewY == -1 {
-                    addBlock(CGPoint(x: BlockArray[0].Coordinates.x, y: BlockHeight - 1))
+                    addBlock(Position: CGPoint(x: BlockArray[0].Coordinates.x, y: BlockHeight - 1))
                 }
                 else {
-                    addBlock(CGPoint(x: BlockArray[0].Coordinates.x, y: NewY))
+                    addBlock(Position: CGPoint(x: BlockArray[0].Coordinates.x, y: NewY))
                 }
                 PreviousDirection = "Down"
             }
@@ -280,7 +283,7 @@ class GameScene: SKScene {
             }
             else if CollisionObject == "food1" || CollisionObject == "food2" || CollisionObject == "food3" {
                 removeBlock()
-                addBlock(CGPoint(x: BlockArray[0].Coordinates.x,y: BlockArray[0].Coordinates.y))
+                addBlock(Position: CGPoint(x: BlockArray[0].Coordinates.x,y: BlockArray[0].Coordinates.y))
                 
                 var FoodBlock: Food
                 var Num: Int
@@ -306,9 +309,9 @@ class GameScene: SKScene {
                 Score += 1
                 ScoreCounter.text = "\(Score)"
                 ScoreCounter.QuickAppearance()
-                SpeedUpTime(BlockArray.count)
+                SpeedUpTime(AmountOfBlocks: BlockArray.count)
                 
-                SpawnFood(Num)
+                SpawnFood(Num: Num)
             }
             else {
                 removeBlock()
@@ -366,7 +369,7 @@ class GameScene: SKScene {
             Taken.append(FoodBlock3.Coordinates)
         }
         
-        if (defaults.stringForKey("GameMode") == "Easy" && Taken.count >= OpenSpaces.count) || (defaults.stringForKey("GameMode") == "Hard" && Taken.count + 2 >= OpenSpaces.count) {
+        if (defaults.string(forKey: "GameMode") == "Easy" && Taken.count >= OpenSpaces.count) || (defaults.string(forKey: "GameMode") == "Hard" && Taken.count + 2 >= OpenSpaces.count) {
             FoodBlock.Coordinates = CGPoint(x: -1, y: -1)
         }
         else {
@@ -375,13 +378,13 @@ class GameScene: SKScene {
             }
             
             func isNotTaken (coordinate: CGPoint) -> Bool {
-                return !ListContains(Taken, Element: coordinate)
+                return !ListContains(List: Taken, Element: coordinate)
             }
             
             var Open = OpenSpaces.filter(isNotTaken)
             var Rando : CGPoint
             
-            if defaults.stringForKey("GameMode") == "Easy" && (Num == 2 || Num == 3) {
+            if defaults.string(forKey: "GameMode") == "Easy" && (Num == 2 || Num == 3) {
                 Rando = CGPoint(x: -1, y: -1)
             }
             else {
@@ -390,7 +393,7 @@ class GameScene: SKScene {
             
             FoodBlock.Coordinates = Rando
             
-            FoodBlock.position = GetBlocksRealPosition(FoodBlock.Coordinates)
+            FoodBlock.position = GetBlocksRealPosition(Position: FoodBlock.Coordinates)
             FoodBlock.size.width = Width / BlockWidth - 2.0
             FoodBlock.size.height = Height / BlockHeight - 2.0
             self.addChild(FoodBlock)
@@ -407,9 +410,9 @@ class GameScene: SKScene {
         // Set-Up and Display GameOverLabel
         GameOverLabel = SKLabelNode(text: "Your Score is \(Score)")
         GameOverLabel.position = CGPoint(x: Width / 2,y: yMid + 0.05 * Height)
-        GameOverLabel.fontColor = UIColor.blackColor()
+        GameOverLabel.fontColor = UIColor.black
         GameOverLabel.fontSize = CGFloat(Width * 0.14)
-        GameOverLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        GameOverLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         self.addChild(GameOverLabel)
         
         // Alphafier
@@ -431,27 +434,27 @@ class GameScene: SKScene {
         
         // Mark: - Store Score
         var HighScoresArray : [AnyObject]?
-        if defaults.stringForKey("GameMode") == "Easy" {
-            HighScoresArray = defaults.arrayForKey("EasyHighScores")
+        if defaults.string(forKey: "GameMode") == "Easy" {
+            HighScoresArray = defaults.array(forKey: "EasyHighScores") as! [AnyObject]
         }
         else {
-            HighScoresArray = defaults.arrayForKey("HardHighScores")
+            HighScoresArray = defaults.array(forKey: "HardHighScores") as! [AnyObject]
         }
         var NewHighScoresArray = [AnyObject]()
         
         // if no highscores yet
         if HighScoresArray == nil {
-            NewHighScoresArray = [Score]
+            NewHighScoresArray = [Score as AnyObject]
         }
         // highscores already been recorded
         else {
             
             var HighScoresSet = Set(HighScoresArray as! [Int])
             HighScoresSet.insert(Score)
-            HighScoresArray = Array(HighScoresSet)
+            HighScoresArray = Array(HighScoresSet) as [AnyObject]
 
             //NewHighScoresArray = HighScoresArray!
-            NewHighScoresArray = (HighScoresArray!).sort({ (s1: AnyObject, s2: AnyObject) -> Bool in
+            NewHighScoresArray = (HighScoresArray!).sorted(by: { (s1: AnyObject, s2: AnyObject) -> Bool in
                 return (s1 as! Int) > (s2 as! Int)})
             
             // remove last element if there are more than 10 already stored
@@ -459,44 +462,55 @@ class GameScene: SKScene {
                 NewHighScoresArray.removeLast()
             }
         }
-        if defaults.stringForKey("GameMode") == "Easy" {
-            defaults.setObject(NewHighScoresArray, forKey: "EasyHighScores")
+        if defaults.string(forKey: "GameMode") == "Easy" {
+            defaults.set(NewHighScoresArray, forKey: "EasyHighScores")
             
-            let currentUser = PFUser.currentUser()
+            //let currentUser = PFUser.currentUser()
+            var currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             
             if currentUser != nil {
-                
-                currentUser!["EasyHighScores"] = NewHighScoresArray
-                currentUser!.saveInBackground()
-                
+            
+                syncHighScores(fbToken: currentUser!.userID, easyHS: NewHighScoresArray as! [Int], hardHS: [])
             }
         }
         else {
-            defaults.setObject(NewHighScoresArray, forKey: "HardHighScores")
+            defaults.set(NewHighScoresArray, forKey: "HardHighScores")
             
-            let currentUser = PFUser.currentUser()
+            //let currentUser = PFUser.currentUser()
+            var currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             
             if currentUser != nil {
                 
-                currentUser!["HardHighScores"] = NewHighScoresArray
-                currentUser!.saveInBackground()
-                
+                syncHighScores(fbToken: currentUser!.userID, easyHS: [], hardHS: NewHighScoresArray as! [Int])
             }
             
+        }
+    }
+    
+    func syncHighScores(fbToken: String, easyHS: [Int], hardHS: [Int]) {
+        API.syncHighScores(fbToken: fbToken, easyHighScores: easyHS, hardHighScores: hardHS) {
+            (response, syncedEasy, syncedHard) in
+            if response != URLResponse.Success {
+                // Handle Error
+                return
+            }
+            
+            self.defaults.set(syncedEasy!, forKey: "EasyHighScores")
+            self.defaults.set(syncedHard!, forKey: "HardHighScores")
         }
     }
     
     func PlayAgain () {
         let gameScene = GameScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 0.5)
-        gameScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 0.5)
+        gameScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(gameScene, transition: transition)
     }
     
     func OpenMainMenu () {
         let mainMenuScene = MainMenuScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 1.0)
-        mainMenuScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 1.0)
+        mainMenuScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(mainMenuScene, transition: transition)
     }
     
@@ -511,9 +525,9 @@ class GameScene: SKScene {
         // Set-Up and Display GameOverLabel
         GameOverLabel = SKLabelNode(text: "Paused")
         GameOverLabel.position = CGPoint(x: Width / 2,y: yMid + 0.05 * Height)
-        GameOverLabel.fontColor = UIColor.blackColor()
+        GameOverLabel.fontColor = UIColor.black
         GameOverLabel.fontSize = CGFloat(64)
-        GameOverLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        GameOverLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         self.addChild(GameOverLabel)
         ScoreCounter.Show()
         
@@ -552,7 +566,7 @@ class GameScene: SKScene {
             block.alpha = block.alpha / 0.1
         }
         
-        SnakeTimer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: "MoveSnake", userInfo: nil, repeats: true)
+        SnakeTimer = Timer.scheduledTimer(timeInterval: Time_Interval, target: self, selector: #selector(GameScene.MoveSnake), userInfo: nil, repeats: true)
         
         FoodBlock1.Flash()
         FoodBlock3.alpha = FoodBlock1.alpha / 0.2
@@ -567,20 +581,20 @@ class GameScene: SKScene {
     
     func SpeedUpTime (AmountOfBlocks: Int) -> () {
         
-        if defaults.stringForKey("GameMode") == "Easy" && AmountOfBlocks <= 100 && AmountOfBlocks % 10 == 0 {
+        if defaults.string(forKey: "GameMode") == "Easy" && AmountOfBlocks <= 100 && AmountOfBlocks % 10 == 0 {
             SnakeTimer.invalidate()
-            TimeInterval = TimeInterval * 0.95
-            SnakeTimer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: "MoveSnake", userInfo: nil, repeats: true)
+            Time_Interval = Time_Interval * 0.95
+            SnakeTimer = Timer.scheduledTimer(timeInterval: Time_Interval, target: self, selector: #selector(GameScene.MoveSnake), userInfo: nil, repeats: true)
         }
-        else if defaults.stringForKey("GameMode") == "Hard" && AmountOfBlocks <= 200 && AmountOfBlocks % 10 == 0 {
+        else if defaults.string(forKey: "GameMode") == "Hard" && AmountOfBlocks <= 200 && AmountOfBlocks % 10 == 0 {
             SnakeTimer.invalidate()
-            TimeInterval = TimeInterval * 0.97
-            SnakeTimer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: "MoveSnake", userInfo: nil, repeats: true)
+            Time_Interval = Time_Interval * 0.97
+            SnakeTimer = Timer.scheduledTimer(timeInterval: Time_Interval, target: self, selector: "MoveSnake", userInfo: nil, repeats: true)
         }
     }
 
     // MARK: - update function
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
 }

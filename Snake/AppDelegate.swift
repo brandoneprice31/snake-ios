@@ -7,32 +7,32 @@
 //
 
 import UIKit
-import Parse
 import FBSDKCoreKit
-import ParseFacebookUtilsV4
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var currentFBToken : FBSDKAccessToken? = nil
 
-
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        Parse.setApplicationId("Zox4UCKWJNX2QAHZkLacC8z91Zwt02RJcZ222PCq", clientKey:"L1xgfc2azM9HkOBBgcAT6YEo0YdRx4L9RxcYjW4A")
-        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
+        // Override point for customization after application launch.
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        let iVC = GameViewController()
+        currentFBToken = FBSDKAccessToken.current()
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        
+        iVC.view.backgroundColor = .white
+        self.window?.rootViewController = iVC
+        self.window?.makeKeyAndVisible()
+        
         return true
     }
     
-    func application(application: UIApplication,
-        openURL url: NSURL,
-        sourceApplication: String?,
-        annotation: AnyObject) -> Bool {
-            return FBSDKApplicationDelegate.sharedInstance().application(application,
-                openURL: url,
-                sourceApplication: sourceApplication,
-                annotation: annotation)
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return FBSDKApplicationDelegate.sharedInstance().application(application, open: url as URL!, sourceApplication: sourceApplication, annotation: annotation)
     }
     
     func applicationWillResignActive(application: UIApplication) {

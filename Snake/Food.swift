@@ -17,14 +17,14 @@ class Food: SKSpriteNode {
     
     init(Coordinate: CGPoint) {
         self.Coordinates = Coordinate
-        super.init(texture: nil, color: UIColor.blackColor(), size: CGSize())
+        super.init(texture: nil, color: UIColor.black, size: CGSize())
         
         self.alpha = 0.5
         
-        FadeIn = SKAction.fadeAlphaTo(0.1, duration: 0.5)
-        FadeOut = SKAction.fadeAlphaTo(0.5, duration: 0.5)
-        Action = SKAction.repeatActionForever(SKAction.sequence([FadeOut,FadeIn]))
-        self.runAction(SKAction.sequence([Action, ActionDone]))
+        FadeIn = SKAction.fadeAlpha(to: 0.1, duration: 0.5)
+        FadeOut = SKAction.fadeAlpha(to: 0.5, duration: 0.5)
+        Action = SKAction.repeatForever(SKAction.sequence([FadeOut,FadeIn]))
+        self.run(SKAction.sequence([Action, ActionDone]))
         
     }
     
@@ -36,6 +36,6 @@ class Food: SKSpriteNode {
         self.removeAllActions()
     }
     func Flash () {
-        self.runAction(SKAction.sequence([Action, ActionDone]))
+        self.run(SKAction.sequence([Action, ActionDone]))
     }
 }

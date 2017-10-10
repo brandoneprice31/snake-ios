@@ -20,7 +20,7 @@ func CheckTouchesBegan (Location: CGPoint, ButtonList: [ButtonNode]) -> Bool{
             
             // darken PlayAgainButton
             ButtonList[i].color = DarkColor
-            ButtonList[i].LabelNode.fontColor = UIColor.whiteColor()
+            ButtonList[i].LabelNode.fontColor = UIColor.white
             ButtonList[i].Clicked = true
             
             return true
@@ -46,12 +46,12 @@ func TouchesMovedOut (Location: CGPoint, ButtonList: [ButtonNode]) -> Bool {
 
 func CheckTouchesMoved (Location: CGPoint, ButtonList: [ButtonNode]) -> Bool {
     
-    if TouchesMovedOut(Location, ButtonList: ButtonList) {
+    if TouchesMovedOut(Location: Location, ButtonList: ButtonList) {
         
         for i in 0...ButtonList.count-1 {
             
             ButtonList[i].color = LightColor
-            ButtonList[i].LabelNode.fontColor = UIColor.blackColor()
+            ButtonList[i].LabelNode.fontColor = UIColor.black
             ButtonList[i].Clicked = false
             
         }

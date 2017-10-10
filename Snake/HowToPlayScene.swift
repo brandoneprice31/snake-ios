@@ -21,13 +21,13 @@ class HowToPlayScene: SKScene {
     var Height = CGFloat()
     var MainMenuButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var PlayButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
-    var SpawnBackgroundSquaresTimer1 = NSTimer()
-    var SpawnBackgroundSquaresTimer2 = NSTimer()
+    var SpawnBackgroundSquaresTimer1 = Timer()
+    var SpawnBackgroundSquaresTimer2 = Timer()
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to _view: SKView) {
         
         // MARK: - Set Up Background
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         self.StartBackgroundDesign()
         
         // MARK: - Set Up Constants
@@ -57,9 +57,9 @@ class HowToPlayScene: SKScene {
         for i in 0...LabelArray.count - 1 {
             let LabelNode = SKLabelNode(text: LabelArray[i])
             LabelNode.fontSize = Width/20
-            LabelNode.fontColor = UIColor.blackColor()
-            LabelNode.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-            LabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+            LabelNode.fontColor = UIColor.black
+            LabelNode.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+            LabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
             
             LabelNode.position = CGPoint(x: xMid, y: yMid + (CGFloat(LabelArray.count/2) - CGFloat(i)) * (0.075 * Height))
             
@@ -67,57 +67,57 @@ class HowToPlayScene: SKScene {
         }
         
         let Title = SKLabelNode(text: "How To Play")
-        Title.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        Title.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         Title.fontSize = Width/6
-        Title.fontColor = UIColor.blackColor()
+        Title.fontColor = UIColor.black
         Title.position = CGPoint(x: xMid, y: yMax - Title.frame.size.height - 0.05 * Height)
         self.addChild(Title)
     }
     
     // MARK: - touches
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesBegan(location, ButtonList: [MainMenuButton,PlayButton])
+            CheckTouchesBegan(Location: location, ButtonList: [MainMenuButton,PlayButton])
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesMoved(location, ButtonList: [MainMenuButton,PlayButton])
+            CheckTouchesMoved(Location: location, ButtonList: [MainMenuButton,PlayButton])
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesLifted(location, ButtonList: [MainMenuButton,PlayButton], ActionList: [OpenMainMenu,PlayGame])
+            CheckTouchesLifted(Location: location, ButtonList: [MainMenuButton,PlayButton], ActionList: [OpenMainMenu,PlayGame])
         }
     }
         
     func PlayGame () {
         let gameScene = GameScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 1.0)
-        gameScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 1.0)
+        gameScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(gameScene, transition: transition)
     }
     
     func OpenMainMenu () {
         let mainMenuScene = MainMenuScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 0.5)
-        mainMenuScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 0.5)
+        mainMenuScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(mainMenuScene, transition: transition)
     }
     
     func StartBackgroundDesign () {
-        SpawnBackgroundSquaresTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(HowToPlayScene.SpawnSquare), userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
     }
     
     func SpawnSquare () {

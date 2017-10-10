@@ -18,11 +18,11 @@ class ScoreLabel: SKLabelNode {
         
         self.alpha = 0.0
         self.zPosition = 200
-        self.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        self.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        self.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
+        self.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         
-        let FadeIn = SKAction.fadeAlphaTo(1.0, duration: 0.25)
-        let FadeOut = SKAction.fadeAlphaTo(0.0, duration: 0.25)
+        let FadeIn = SKAction.fadeAlpha(to: 1.0, duration: 0.25)
+        let FadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.25)
         
         Action = SKAction.sequence([FadeIn,FadeOut])
     }
@@ -32,7 +32,7 @@ class ScoreLabel: SKLabelNode {
     }
     
     func QuickAppearance () {
-        self.runAction(Action)
+        self.run(Action)
     }
     
     func Show () {

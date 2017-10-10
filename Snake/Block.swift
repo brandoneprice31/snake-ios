@@ -17,7 +17,7 @@ class Block: SKSpriteNode {
         self.TotalBlockAmount = TotalBlocks
         self.BlockNumber = BlockNum
         self.Coordinates = Coordinate
-        super.init(texture: nil, color: UIColor.blackColor(), size: CGSize())
+        super.init(texture: nil, color: UIColor.black, size: CGSize())
         self.zPosition = TotalBlockAmount - BlockNumber
         
     }

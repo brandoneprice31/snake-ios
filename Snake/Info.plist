@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Snake</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -23,19 +25,22 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb898425113539784</string>
+				<string>fb1508099112568983</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>5</string>
 	<key>FacebookAppID</key>
-	<string>898425113539784</string>
+	<string>1508099112568983</string>
 	<key>FacebookDisplayName</key>
-	<string>Snake Professional</string>
+	<string>Snake</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
 		<string>fbauth2</string>
+		<string>fbshareextension</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -68,8 +73,6 @@
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

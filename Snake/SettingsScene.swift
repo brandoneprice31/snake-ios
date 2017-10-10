@@ -8,7 +8,6 @@
 
 import SpriteKit
 import UIKit
-import Parse
 
 class SettingsScene: SKScene {
     
@@ -21,7 +20,7 @@ class SettingsScene: SKScene {
     var yMid = CGFloat()
     var Width = CGFloat()
     var Height = CGFloat()
-    var defaults = NSUserDefaults()
+    var defaults = UserDefaults()
     var HighScoresArray = [AnyObject]()
     var MainMenuButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var PlayButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
@@ -31,13 +30,13 @@ class SettingsScene: SKScene {
     var PopUpYesButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var PopUpNoButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var PopUpIsUp = String()
-    var SpawnBackgroundSquaresTimer1 = NSTimer()
-    var SpawnBackgroundSquaresTimer2 = NSTimer()
+    var SpawnBackgroundSquaresTimer1 = Timer()
+    var SpawnBackgroundSquaresTimer2 = Timer()
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         
         // MARK: - Set Up Background
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         self.StartBackgroundDesign()
         
         // MARK: - Set Up Constants
@@ -64,26 +63,26 @@ class SettingsScene: SKScene {
         
         
         // Mark: - Grab Settings
-        defaults = NSUserDefaults.standardUserDefaults()
+        defaults = UserDefaults.standard
         
         // Set Easy Mode if Never Set
-        if defaults.stringForKey("GameMode") == nil {
-            defaults.setObject("Easy", forKey: "GameMode")
+        if defaults.string(forKey: "GameMode") == nil {
+            defaults.set("Easy", forKey: "GameMode")
         }
         
         // GameModeButtons
         let aboveButtonSize =  CGSize(width: 0.16 * Width, height: 0.08 * Height)
         
-        GameModeButton = ButtonNode(Size: aboveButtonSize, Position: CGPoint(x: xMid + 0.15 * Width, y: yMid + 0.1 * Height), Label: defaults.stringForKey("GameMode")!)
+        GameModeButton = ButtonNode(Size: aboveButtonSize, Position: CGPoint(x: xMid + 0.15 * Width, y: yMid + 0.1 * Height), Label: defaults.string(forKey: "GameMode")!)
         GameModeButton.LabelNode.fontSize = GameModeButton.size.width/2.5
         self.addChild(GameModeButton)
         
         let GameModeLabel = SKLabelNode(text: "Game Mode:")
-        GameModeLabel.fontColor = UIColor.blackColor()
+        GameModeLabel.fontColor = UIColor.black
         GameModeLabel.fontSize = Width/18
         GameModeLabel.position = CGPoint(x: xMid - 0.4 * Width, y: yMid + 0.1 * Height)
-        GameModeLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        GameModeLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left
+        GameModeLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+        GameModeLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         GameModeLabel.zPosition = 10
         self.addChild(GameModeLabel)
         
@@ -94,11 +93,11 @@ class SettingsScene: SKScene {
         
         let LoginLogoutLabel = SKLabelNode(text: "Login / Logout:")
         LoginLogoutLabel.zPosition = 11
-        LoginLogoutLabel.fontColor = UIColor.blackColor()
+        LoginLogoutLabel.fontColor = UIColor.black
         LoginLogoutLabel.fontSize = Width/18
         LoginLogoutLabel.position = CGPoint(x: GameModeLabel.position.x, y: FacebookConnectButton.position.y)
-        LoginLogoutLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        LoginLogoutLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left
+        LoginLogoutLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+        LoginLogoutLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         self.addChild(LoginLogoutLabel)
         
         
@@ -109,113 +108,114 @@ class SettingsScene: SKScene {
         
         let ClearHighScoresLabel = SKLabelNode(text: "Clear High Scores?")
         ClearHighScoresLabel.zPosition = 11
-        ClearHighScoresLabel.fontColor = UIColor.blackColor()
+        ClearHighScoresLabel.fontColor = UIColor.black
         ClearHighScoresLabel.fontSize = Width/18
         ClearHighScoresLabel.position = CGPoint(x: GameModeLabel.position.x, y: ClearHighScoreButton.position.y)
-        ClearHighScoresLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        ClearHighScoresLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left
+        ClearHighScoresLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+        ClearHighScoresLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         self.addChild(ClearHighScoresLabel)
         
         // Title
         let Title = SKLabelNode(text: "Settings")
-        Title.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        Title.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         Title.fontSize = Width/5
-        Title.fontColor = UIColor.blackColor()
+        Title.fontColor = UIColor.black
         Title.position = CGPoint(x: xMid, y: (yMax - GameModeButton.frame.maxY) / 2 + GameModeButton.frame.maxY)
         self.addChild(Title)
     }
     
     // MARK: - touches
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
             if PopUpIsUp == "No" {
                 
-                CheckTouchesBegan(location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
+                CheckTouchesBegan(Location: location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
 
             }
             else {
                 
-                CheckTouchesBegan(location, ButtonList: [PopUpYesButton,PopUpNoButton])
+                CheckTouchesBegan(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton])
                 
             }
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
             if PopUpIsUp == "No" {
                 // Moved away from all the buttons
-                CheckTouchesMoved(location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
+                CheckTouchesMoved(Location: location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
                 
             }
             else {
                 
-                CheckTouchesMoved(location, ButtonList: [PopUpYesButton,PopUpNoButton])
+                CheckTouchesMoved(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton])
                 
             }
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
             if PopUpIsUp == "No" {
                 
-                CheckTouchesLifted(location, ButtonList: [MainMenuButton,PlayButton,ClearHighScoreButton,FacebookConnectButton], ActionList: [OpenMainMenu,PlayGame,ClearHighScores,FacebookConnect])
+                CheckTouchesLifted(Location: location, ButtonList: [MainMenuButton,PlayButton,ClearHighScoreButton,FacebookConnectButton], ActionList: [OpenMainMenu,PlayGame,ClearHighScores,FacebookConnect])
                 
-                if CheckTouchesLifted(location, ButtonList: [GameModeButton], ActionList: [ChangeGameMode]) {
+                if CheckTouchesLifted(Location: location, ButtonList: [GameModeButton], ActionList: [ChangeGameMode]) {
                     GameModeButton.color = LightColor
-                    GameModeButton.LabelNode.fontColor = UIColor.blackColor()
+                    GameModeButton.LabelNode.fontColor = UIColor.black
                 }
                 
             }
             else {
                 
-                CheckTouchesLifted(location, ButtonList: [PopUpYesButton,PopUpNoButton], ActionList: [PopUpYesButtonClicked,PopUpNoButtonClicked])
+                CheckTouchesLifted(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton], ActionList: [PopUpYesButtonClicked,PopUpNoButtonClicked])
             }
         }
     }
     
     func PlayGame () {
         let gameScene = GameScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 1.0)
-        gameScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 1.0)
+        gameScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(gameScene, transition: transition)
     }
     
     func OpenMainMenu () {
         let mainMenuScene = MainMenuScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 0.5)
-        mainMenuScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 0.5)
+        mainMenuScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(mainMenuScene, transition: transition)
     }
     
     func FacebookConnect () {
+        /*
         if PFUser.currentUser() != nil {
             PFUser.logOut()
-        }
+        }*/
         
         let loginScene = LoginScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 1.0)
-        loginScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 1.0)
+        loginScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(loginScene, transition: transition)
     }
     
     func ChangeGameMode () {
-        if defaults.stringForKey("GameMode") == "Easy" {
-            defaults.setObject("Hard", forKey: "GameMode")
+        if defaults.string(forKey: "GameMode") == "Easy" {
+            defaults.set("Hard", forKey: "GameMode")
         }
         else {
-            defaults.setObject("Easy", forKey: "GameMode")
+            defaults.set("Easy", forKey: "GameMode")
         }
-        GameModeButton.LabelNode.text = defaults.stringForKey("GameMode")
+        GameModeButton.LabelNode.text = defaults.string(forKey: "GameMode")
     }
     
     func ClearHighScores () {
@@ -245,21 +245,21 @@ class SettingsScene: SKScene {
         self.addChild(PopUpNoButton)
         
         let YouSureLabel1 = SKLabelNode(text: "Are you sure that you")
-        YouSureLabel1.fontColor = UIColor.blackColor()
+        YouSureLabel1.fontColor = UIColor.black
         YouSureLabel1.fontSize = Width / 10
         YouSureLabel1.zPosition = PopUpBackground.zPosition + 1
         YouSureLabel1.position = CGPoint(x: xMid, y: yMid + 0.30 * Height)
         self.addChild(YouSureLabel1)
         
         let YouSureLabel2 = SKLabelNode(text: "want to delete your")
-        YouSureLabel2.fontColor = UIColor.blackColor()
+        YouSureLabel2.fontColor = UIColor.black
         YouSureLabel2.fontSize = Width / 10
         YouSureLabel2.zPosition = PopUpBackground.zPosition + 1
         YouSureLabel2.position = CGPoint(x: xMid, y: yMid + 0.18 * Height)
         self.addChild(YouSureLabel2)
         
         let YouSureLabel3 = SKLabelNode(text: "high scores?")
-        YouSureLabel3.fontColor = UIColor.blackColor()
+        YouSureLabel3.fontColor = UIColor.black
         YouSureLabel3.fontSize = Width / 10
         YouSureLabel3.zPosition = PopUpBackground.zPosition + 1
         YouSureLabel3.position = CGPoint(x: xMid, y: yMid + 0.06 * Height)
@@ -269,44 +269,46 @@ class SettingsScene: SKScene {
     }
     
     func PopUpYesButtonClicked () {
-        if defaults.stringForKey("GameMode") == "Easy" {
-            defaults.removeObjectForKey("EasyHighScores")
+        if defaults.string(forKey: "GameMode") == "Easy" {
+            defaults.removeObject(forKey: "EasyHighScores")
             
-            let user = PFUser.currentUser()
+            //let user = PFUser.currentUser()
+            var user : [String: Any]? = nil
             
             if user != nil {
                 user!["EasyHighScores"] = []
-                user!.saveInBackground()
+                //user!.saveInBackground()
             }
         }
         else {
-            defaults.removeObjectForKey("HardHighScores")
+            defaults.removeObject(forKey: "HardHighScores")
             
-            let user = PFUser.currentUser()
+            //let user = PFUser.currentUser()
+            var user : [String: Any]? = nil
             
             if user != nil {
                 user!["HardHighScores"] = []
-                user!.saveInBackground()
+                //user!.saveInBackground()
             }
         }
         
         let settingsScene = SettingsScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 0.75)
-        settingsScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 0.75)
+        settingsScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(settingsScene, transition: transition)
     }
     
     func PopUpNoButtonClicked () {
         let settingsScene = SettingsScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 0.025)
-        settingsScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 0.025)
+        settingsScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(settingsScene, transition: transition)
     }
     
     func StartBackgroundDesign () {
-        SpawnBackgroundSquaresTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
     }
     
     func SpawnSquare () {
@@ -320,7 +322,7 @@ class SettingsScene: SKScene {
     }
     
     // MARK: - update function
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
 }

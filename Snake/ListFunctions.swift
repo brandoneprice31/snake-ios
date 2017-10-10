@@ -17,7 +17,7 @@ func TenMaxOverBothLists (L1: [AnyObject], L2: [AnyObject]) -> [Int] {
     
     let CombL = Array(CombSet) as [AnyObject]
     
-    var SortedCombL = (CombL).sort({ (s1: AnyObject, s2: AnyObject) -> Bool in
+    var SortedCombL = (CombL).sorted(by: { (s1: AnyObject, s2: AnyObject) -> Bool in
         return (s1 as! Int) > (s2 as! Int)})
     
     // remove last element if there are more than 10 already stored

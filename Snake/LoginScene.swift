@@ -7,9 +7,8 @@
 //
 
 import SpriteKit
-import Parse
 import FBSDKCoreKit
-import ParseFacebookUtilsV4
+import FBSDKLoginKit
 
 class LoginScene: SKScene {
     
@@ -26,16 +25,16 @@ class LoginScene: SKScene {
     var Title1 = SKLabelNode()
     var Title2 = SKLabelNode()
     var Disclaimer = SKLabelNode()
-    var SpawnBackgroundSquaresTimer1 = NSTimer()
-    var SpawnBackgroundSquaresTimer2 = NSTimer()
+    var SpawnBackgroundSquaresTimer1 = Timer()
+    var SpawnBackgroundSquaresTimer2 = Timer()
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         
         // TESTING
         
         
         // Constants
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         self.StartBackgroundDesign()
         self.Height = self.view!.frame.size.height
         self.Width = self.view!.frame.size.width
@@ -57,25 +56,25 @@ class LoginScene: SKScene {
         
         // TODO: Create Title
         Title1 = SKLabelNode(text: "Facebook")
-        Title1.fontColor = UIColor.blackColor()
+        Title1.fontColor = UIColor.black
         Title1.fontSize = Width / 5
         Title1.position = CGPoint(x: xMid, y: yMid + 0.3 * Height)
-        Title1.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        Title1.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        Title1.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
+        Title1.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         
         Title2 = SKLabelNode(text: "Connect")
         Title2.fontColor = Title1.fontColor
         Title2.fontSize = Title1.fontSize * 0.8
         Title2.position = CGPoint(x: xMid, y: Title1.position.y - 0.13 * Height)
-        Title2.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        Title2.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        Title2.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
+        Title2.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         
         Disclaimer = SKLabelNode(text: "We will not post without your permission.")
         Disclaimer.fontColor = Title1.fontColor
         Disclaimer.fontSize = Width / 20
         Disclaimer.position = CGPoint(x: xMid, y:(SkipButton.position.y - yMin)/2 + yMin)
-        Disclaimer.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        Disclaimer.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        Disclaimer.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
+        Disclaimer.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         
         self.addChild(Title1)
         self.addChild(Title2)
@@ -84,158 +83,104 @@ class LoginScene: SKScene {
     }
     
     // MARK: - touches
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesBegan(location, ButtonList: [FacebookButton,SkipButton])
+            CheckTouchesBegan(Location: location, ButtonList: [FacebookButton,SkipButton])
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesMoved(location, ButtonList: [FacebookButton,SkipButton])
+            CheckTouchesMoved(Location: location, ButtonList: [FacebookButton,SkipButton])
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesLifted(location, ButtonList: [FacebookButton,SkipButton], ActionList: [FacebookButtonClicked,SkipButtonClicked])
+            CheckTouchesLifted(Location: location, ButtonList: [FacebookButton,SkipButton], ActionList: [FacebookButtonClicked,SkipButtonClicked])
         }
     }
     
     func FacebookButtonClicked () {
         
-        PFFacebookUtils.logInInBackgroundWithReadPermissions(["user_friends"]) {
-            (user: PFUser?, error: NSError?) -> Void in
-            if let user = user {
+        FBSDKLoginManager().logIn(withReadPermissions: ["public_profile", "user_friends"], from: viewDelegate, handler: {
+            (result, error) in
+            
+            // box cancelled
+            if (result?.isCancelled)! {
+                return
                 
+                // some error occured
+            } else if error != nil {
+                return
                 
-                // set the users fbID to fbID
-                fetchUserInforFromFacebook()
-                
-                if user.isNew {
-                    
-                    // User signed up and logged in through Facebook
-                    
-                    // Upload current highscores to cloud
-                    let defaults = NSUserDefaults.standardUserDefaults()
-                    let easyHighScores = defaults.arrayForKey("EasyHighScores")
-                    let hardHighScores = defaults.arrayForKey("HardHighScores")
-                    
-                    if easyHighScores == nil {
-                        
-                        user["EasyHighScores"] = []
-                        defaults.setObject([], forKey: "EasyHighScores")
-                        
-                    }
-                    else {
-                        
-                        user["EasyHighScores"] = easyHighScores!
-                        
-                    }
-                    
-                    
-                    if hardHighScores == nil {
-                        
-                        user["HardHighScores"] = []
-                        defaults.setObject([], forKey: "HardHighScores")
-                        
-                    }
-                    else {
-                        
-                        user["HardHighScores"] = hardHighScores!
-                        
-                    }
-                    
-                    self.OpenMainMenu()
-                    
-                    
-                } else {
-                    
-                    // User logged in through Facebook
-                    
-                    // Update cload highscores and local highscores
-                    
-                    let defaults = NSUserDefaults.standardUserDefaults()
-                    let easyHighScores = defaults.arrayForKey("EasyHighScores")
-                    let hardHighScores = defaults.arrayForKey("HardHighScores")
-                    
-                    // Update the local to be whats on the cloud and update cloud if cloud is empty
-                    if easyHighScores == nil {
-                        
-                        // update cloud if empty
-                        if user["EasyHighScores"] == nil {
-                            user["EasyHighScores"] = []
-                        }
-                        
-                        // set local to cloud
-                        defaults.setObject(user["EasyHighScores"], forKey: "EasyHighScores")
-                        
-                    }
-                    else {
-                        
-                        // update both the cloud and the local by taking the max over both
-                        
-                        if user["EasyHighScores"] == nil {
-                            user["EasyHighScores"] = []
-                        }
-                        
-                        let onlineEasyHighScores = user["EasyHighScores"]
-                        let localEasyHighScores = easyHighScores
-                        
-                        let newHighScores = TenMaxOverBothLists(onlineEasyHighScores as! [AnyObject], L2: localEasyHighScores!)
-                        
-                        user["EasyHighScores"] = newHighScores
-                        defaults.setObject(newHighScores, forKey: "EasyHighScores")
-                        
-                    }
-                    
-                    
-                    if hardHighScores == nil {
-                        
-                        // update cloud if empty
-                        if user["HardHighScores"] == nil {
-                            user["HardHighScores"] = []
-                        }
-                        
-                        // set local to cloud
-                        defaults.setObject(user["HardHighScores"], forKey: "HardHighScores")
-                        
-                    }
-                    else {
-                        
-                        // update both the cloud and the local by taking the max over both
-                        
-                        if user["HardHighScores"] == nil {
-                            user["HardHighScores"] = []
-                        }
-                        
-                        let onlineHardHighScores = user["HardHighScores"]
-                        let localHardHighScores = hardHighScores
-                        
-                        let newHighScores = TenMaxOverBothLists(onlineHardHighScores as! [AnyObject], L2: localHardHighScores!)
-                        
-                        user["HardHighScores"] = newHighScores
-                        defaults.setObject(newHighScores, forKey: "HardHighScores")
-                        
-                    }
-                    
-                    self.OpenMainMenu()
-                    
-                }
+                // login was successful
             } else {
-                // The user cancelled the Facebook login
-                
-                
+                self.removeAllChildren()
+                self.handleFBLogin()
             }
-        }
+        })
+    }
+    
+    func handleFBLogin() {
+        // set the users fbID to fbID
+        let fbToken = FBSDKAccessToken.current().userID!
         
+        // API - check if user exists.
+        API.findUserByFbToken(fbToken: fbToken, completionHandler: {
+            (response, user) in
+            
+            if response != URLResponse.Success {
+                FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "first_name, last_name"]).start(completionHandler: { (connection, result, error) -> Void in
+                    if error != nil {
+                        // Handle error.
+                        return
+                    }
+                    
+                    let data = result as! [String : String]
+    
+                    // We need to create a new user.
+                    API.createUser(firstName: data["first_name"] as! String, lastName: data["last_name"] as! String, fbToken: fbToken, completionHandler: {
+                        (response, user) in
+                        
+                        if response != URLResponse.Success {
+                            // Error handling.
+                            return
+                        }
+                        let defaults = UserDefaults.standard
+                        defaults.set([], forKey: "EasyHighScores")
+                        defaults.set([], forKey: "HardHighScores")
+                        self.OpenMainMenu()
+                    })
+                })
+                return
+            }
+            
+            // Sync local and cloud highscores.
+            let defaults = UserDefaults.standard
+            let easyHighScores = defaults.array(forKey: "EasyHighScores") as! [Int]
+            let hardHighScores = defaults.array(forKey: "HardHighScores") as! [Int]
+            API.syncHighScores(fbToken: user!.fbToken, easyHighScores: easyHighScores, hardHighScores: hardHighScores, completionHandler: {
+                (response, syncedEasyHS, syncedHardHS) in
+                
+                if response != URLResponse.Success{
+                    // Error Handling
+                    return
+                }
+                
+                let defaults = UserDefaults.standard
+                defaults.set(syncedEasyHS!, forKey: "EasyHighScores")
+                defaults.set(syncedHardHS, forKey: "HardHighScores")
+                self.OpenMainMenu()
+            })
+        })
     }
     
     func SkipButtonClicked () {
@@ -244,9 +189,9 @@ class LoginScene: SKScene {
     }
     
     func StartBackgroundDesign () {
-        SpawnBackgroundSquaresTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(LoginScene.SpawnSquare), userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(LoginScene.SpawnSquare), userInfo: nil, repeats: true)
     }
     
     func SpawnSquare () {
@@ -257,30 +202,10 @@ class LoginScene: SKScene {
     func OpenMainMenu () {
         
         let mainMenuScene = MainMenuScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 1.0)
-        mainMenuScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 1.0)
+        mainMenuScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(mainMenuScene, transition: transition)
         
     }
 
-}
-
-func fetchUserInforFromFacebook () {
-    if ((FBSDKAccessToken.currentAccessToken()) != nil){
-        
-        let request = FBSDKGraphRequest(graphPath:"me", parameters:nil)
-        
-        
-        request.startWithCompletionHandler({connection, result, error in
-            if error == nil {
-                
-                //FACEBOOK DATA IN DICTIONARY
-                let userData = result as! NSDictionary
-                let currentUser : PFUser = PFUser.currentUser()!
-                currentUser.setObject(userData.objectForKey("id")as! String, forKey: "fbID")
-                currentUser.setObject( userData.objectForKey("name")as! String, forKey: "fullName")
-                currentUser.saveInBackground()
-            }
-        })
-    }
 }

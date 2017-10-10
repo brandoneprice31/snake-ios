@@ -23,14 +23,14 @@ class MainMenuScene: SKScene {
     var HighScoresButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var SettingsButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     var Title = SKLabelNode()
-    var SpawnBackgroundSquaresTimer1 = NSTimer()
-    var SpawnBackgroundSquaresTimer2 = NSTimer()
+    var SpawnBackgroundSquaresTimer1 = Timer()
+    var SpawnBackgroundSquaresTimer2 = Timer()
     var HowToPlayButton = ButtonNode(Size: CGSize(), Position: CGPoint(), Label: "")
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to _view: SKView) {
         
         // MARK: - Set Up Background
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         self.StartBackgroundDesign()
         
         // MARK: - Set Up Constants
@@ -47,9 +47,9 @@ class MainMenuScene: SKScene {
         // Mark: - Place Title
         Title = SKLabelNode(text: "Snake")
         Title.position = CGPoint(x: xMid, y: yMid + (ButtonSize.height + 12) * 2.5)
-        Title.fontColor = UIColor.blackColor()
+        Title.fontColor = UIColor.black
         Title.fontSize = 100
-        Title.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        Title.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
         self.addChild(Title)
         
         // Mark: - Place Buttons
@@ -69,30 +69,30 @@ class MainMenuScene: SKScene {
     
     // MARK: - touches
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesBegan(location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
+            CheckTouchesBegan(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
             
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesMoved(location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
+            CheckTouchesMoved(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
 
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in (touches ) {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            CheckTouchesLifted(location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton], ActionList: [OpenHighScores,PlayGame,OpenSettings,OpenHowToPlay])
+            CheckTouchesLifted(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton], ActionList: [OpenHighScores,PlayGame,OpenSettings,OpenHowToPlay])
             
         }
     }
@@ -100,31 +100,31 @@ class MainMenuScene: SKScene {
     func PlayGame () {
         CloseMainMenu()
         let gameScene = GameScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 1.0)
-        gameScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 1.0)
+        gameScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(gameScene, transition: transition)
     }
     
     func OpenHighScores () {
         CloseMainMenu()
         let highScoresScene = HighScoresScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 0.5)
-        highScoresScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 0.5)
+        highScoresScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(highScoresScene, transition: transition)
     }
     
     func OpenSettings () {
         CloseMainMenu()
         let settingsScene = SettingsScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 0.5)
-        settingsScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 0.5)
+        settingsScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(settingsScene, transition: transition)
     }
     
     func StartBackgroundDesign () {
-        SpawnBackgroundSquaresTimer1 = NSTimer.scheduledTimerWithTimeInterval(0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
     }
     
     func SpawnSquare () {
@@ -141,13 +141,13 @@ class MainMenuScene: SKScene {
     func OpenHowToPlay () {
         CloseMainMenu()
         let howToPlayScene = HowToPlayScene(size: self.size)
-        let transition = SKTransition.fadeWithColor(UIColor.whiteColor(), duration: 1.0)
-        howToPlayScene.scaleMode = SKSceneScaleMode.ResizeFill
+        let transition = SKTransition.fade(with: UIColor.white, duration: 1.0)
+        howToPlayScene.scaleMode = SKSceneScaleMode.resizeFill
         self.scene!.view?.presentScene(howToPlayScene, transition: transition)
     }
     
     // MARK: - update function
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
 }
