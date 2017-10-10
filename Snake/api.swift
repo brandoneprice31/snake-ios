@@ -93,6 +93,21 @@ class API {
             })
         }
     }
+    
+    class func clearHighScores(fbToken: String, mode: String,completionHandler: @escaping (URLResponse) -> Void) {
+        API.performRequest(requestType: "DELETE", urlPath: "users/fb_token/\(fbToken)/clear_highscores/\(mode)", json: nil, token: nil) {
+            (response, data) in
+            handleResponse(response: response, data: data, completionHandler: {
+                response, _ in
+                
+                if response != URLResponse.Success {
+                    return completionHandler(response)
+                }
+                
+                return completionHandler(URLResponse.Success)
+            })
+        }
+    }
 
     
     // HELPERS

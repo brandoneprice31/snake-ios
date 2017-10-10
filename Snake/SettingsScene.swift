@@ -270,25 +270,32 @@ class SettingsScene: SKScene {
     
     func PopUpYesButtonClicked () {
         if defaults.string(forKey: "GameMode") == "Easy" {
-            defaults.removeObject(forKey: "EasyHighScores")
+            defaults.set([], forKey: "EasyHighScores")
             
-            //let user = PFUser.currentUser()
-            var user : [String: Any]? = nil
+            let user = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             
             if user != nil {
-                user!["EasyHighScores"] = []
-                //user!.saveInBackground()
+                API.clearHighScores(fbToken: user!.userID, mode: "easy", completionHandler: {
+                    (response) in
+                    if response != URLResponse.Success {
+                        // Handle Error
+                        return
+                    }
+                })
             }
-        }
-        else {
-            defaults.removeObject(forKey: "HardHighScores")
+        } else {
+            defaults.set([], forKey: "HardHighScores")
             
-            //let user = PFUser.currentUser()
-            var user : [String: Any]? = nil
+            let user = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             
             if user != nil {
-                user!["HardHighScores"] = []
-                //user!.saveInBackground()
+                API.clearHighScores(fbToken: user!.userID, mode: "hard", completionHandler: {
+                    (response) in
+                    if response != URLResponse.Success {
+                        // Handle Error
+                        return
+                    }
+                })
             }
         }
         
@@ -306,9 +313,9 @@ class SettingsScene: SKScene {
     }
     
     func StartBackgroundDesign () {
-        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: Selector("SpawnSquare"), userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: Selector("SpawnSquare"), userInfo: nil, repeats: true)
     }
     
     func SpawnSquare () {
@@ -319,10 +326,5 @@ class SettingsScene: SKScene {
     func CloseHighScores () {
         SpawnBackgroundSquaresTimer1.invalidate()
         SpawnBackgroundSquaresTimer2.invalidate()
-    }
-    
-    // MARK: - update function
-    override func update(_ currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
     }
 }
