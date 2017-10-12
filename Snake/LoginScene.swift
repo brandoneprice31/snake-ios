@@ -165,9 +165,9 @@ class LoginScene: SKScene {
             
             // Sync local and cloud highscores.
             let defaults = UserDefaults.standard
-            let easyHighScores = defaults.array(forKey: "EasyHighScores") as! [Int]
-            let hardHighScores = defaults.array(forKey: "HardHighScores") as! [Int]
-            API.syncHighScores(fbToken: user!.fbToken, easyHighScores: easyHighScores, hardHighScores: hardHighScores, completionHandler: {
+            let easyHighScores = defaults.array(forKey: "EasyHighScores") as? [Int]
+            let hardHighScores = defaults.array(forKey: "HardHighScores") as? [Int]
+            API.syncHighScores(fbToken: user!.fbToken, easyHighScores: easyHighScores == nil ? [Int]() : easyHighScores!, hardHighScores: hardHighScores == nil ? [Int]() : hardHighScores!, completionHandler: {
                 (response, syncedEasyHS, syncedHardHS) in
                 
                 if response != URLResponse.Success{

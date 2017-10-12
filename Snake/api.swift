@@ -9,7 +9,8 @@
 import Foundation
 
 class API {
-    static let rootURLString = "http://127.0.0.1:8081/"
+    //static let rootURLString = "http://127.0.0.1:8081/"
+    static let rootURLString = "https://api.snake-production.bep-projects.com/"
     
     class func createUser(firstName: String, lastName: String, fbToken: String, completionHandler: @escaping (URLResponse, User?) -> Void) {
         let json = ["first_name" : firstName, "last_name" : lastName, "fb_token" : fbToken]
