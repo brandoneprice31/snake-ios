@@ -386,6 +386,12 @@ class HighScoresScene: SKScene {
                         
                         return dict
                     })
+                    
+                    self.nameScoreArr += [["name": "You", "score": (self.HighScoresArray as! [Int]).max() == nil ? 0 : (self.HighScoresArray as! [Int]).max()]]
+                    
+                    if self.Mode == "Friends" {
+                        self.FriendsButtonClicked()
+                    }
                 })
             }
         })

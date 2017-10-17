@@ -30,7 +30,7 @@
 		A82A47D01C062AAD00E0DCDD /* LoginScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82A47CF1C062AAD00E0DCDD /* LoginScene.swift */; };
 		A82A47D21C062AEF00E0DCDD /* LoginScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A82A47D11C062AEF00E0DCDD /* LoginScene.sks */; };
 		A82A47D41C0679F200E0DCDD /* ListFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82A47D31C0679F200E0DCDD /* ListFunctions.swift */; };
-		A84B0EF61F8C59050018B3AD /* api.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84B0EF51F8C59050018B3AD /* api.swift */; };
+		A84B0EF61F8C59050018B3AD /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84B0EF51F8C59050018B3AD /* API.swift */; };
 		A84B0EF81F8C59ED0018B3AD /* user.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84B0EF71F8C59ED0018B3AD /* user.swift */; };
 		A8BE37C71BEA95250042CAAB /* TouchFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE37C61BEA95250042CAAB /* TouchFunctions.swift */; };
 		A8BE37C91BEACEEF0042CAAB /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE37C81BEACEEF0042CAAB /* ButtonNode.swift */; };
@@ -74,7 +74,7 @@
 		A82A47CF1C062AAD00E0DCDD /* LoginScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginScene.swift; sourceTree = "<group>"; };
 		A82A47D11C062AEF00E0DCDD /* LoginScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LoginScene.sks; sourceTree = "<group>"; };
 		A82A47D31C0679F200E0DCDD /* ListFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListFunctions.swift; sourceTree = "<group>"; };
-		A84B0EF51F8C59050018B3AD /* api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = api.swift; sourceTree = "<group>"; };
+		A84B0EF51F8C59050018B3AD /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		A84B0EF71F8C59ED0018B3AD /* user.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = user.swift; sourceTree = "<group>"; };
 		A8BE37C61BEA95250042CAAB /* TouchFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchFunctions.swift; sourceTree = "<group>"; };
 		A8BE37C81BEACEEF0042CAAB /* ButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 				A8BE37CC1BEBE9790042CAAB /* Nodes */,
 				A8BE37CD1BEBE9BD0042CAAB /* Scenes */,
 				A8BE37CA1BEBE9480042CAAB /* SKS */,
-				A84B0EF51F8C59050018B3AD /* api.swift */,
+				A84B0EF51F8C59050018B3AD /* API.swift */,
 				5A8BE25B1B99FC1600BD4374 /* AppDelegate.swift */,
 				5A8BE28B1B99FDB900BD4374 /* GameViewController.swift */,
 				5A8BE2681B99FC1600BD4374 /* LaunchScreen.xib */,
@@ -403,7 +403,7 @@
 				5A8BE29C1B9B85F200BD4374 /* HighScoresScene.swift in Sources */,
 				5A572F7A1BA8811400DDD9E7 /* ScoreLabel.swift in Sources */,
 				5A8BE25C1B99FC1600BD4374 /* AppDelegate.swift in Sources */,
-				A84B0EF61F8C59050018B3AD /* api.swift in Sources */,
+				A84B0EF61F8C59050018B3AD /* API.swift in Sources */,
 				A8BE37C91BEACEEF0042CAAB /* ButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
