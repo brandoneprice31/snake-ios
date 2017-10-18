@@ -435,9 +435,16 @@ class GameScene: SKScene {
         // Mark: - Store Score
         var HighScoresArray : [AnyObject]?
         if defaults.string(forKey: "GameMode") == "Easy" {
+            
+            if defaults.array(forKey: "EasyHighScores") == nil {
+                defaults.set([], forKey: "EasyHighScores")
+            }
             HighScoresArray = defaults.array(forKey: "EasyHighScores") as! [AnyObject]
         }
         else {
+            if defaults.array(forKey: "HardHighScores") == nil {
+                defaults.set([], forKey: "HardHighScores")
+            }
             HighScoresArray = defaults.array(forKey: "HardHighScores") as! [AnyObject]
         }
         var NewHighScoresArray = [AnyObject]()
@@ -466,7 +473,7 @@ class GameScene: SKScene {
             defaults.set(NewHighScoresArray, forKey: "EasyHighScores")
             
             //let currentUser = PFUser.currentUser()
-            var currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
+            let currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             
             if currentUser != nil {
             
@@ -477,7 +484,7 @@ class GameScene: SKScene {
             defaults.set(NewHighScoresArray, forKey: "HardHighScores")
             
             //let currentUser = PFUser.currentUser()
-            var currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
+            let currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             
             if currentUser != nil {
                 

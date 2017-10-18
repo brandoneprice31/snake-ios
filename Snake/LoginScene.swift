@@ -114,11 +114,11 @@ class LoginScene: SKScene {
             (result, error) in
             
             // box cancelled
-            if (result?.isCancelled)! {
+            if error != nil {
                 return
                 
                 // some error occured
-            } else if error != nil {
+            } else if result!.isCancelled {
                 return
                 
                 // login was successful
