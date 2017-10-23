@@ -88,7 +88,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
-      customArchiveName = "Snake 1.2.1"
+      customArchiveName = "Snake 2.0"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
