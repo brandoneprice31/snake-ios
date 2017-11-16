@@ -157,6 +157,8 @@ class LoginScene: SKScene {
                         let defaults = UserDefaults.standard
                         defaults.set([], forKey: "EasyHighScores")
                         defaults.set([], forKey: "HardHighScores")
+                        defaults.set(true, forKey: "ReturningUser1")
+                        defaults.synchronize()
                         self.OpenMainMenu()
                     })
                 })
@@ -178,6 +180,8 @@ class LoginScene: SKScene {
                 let defaults = UserDefaults.standard
                 defaults.set(syncedEasyHS!, forKey: "EasyHighScores")
                 defaults.set(syncedHardHS, forKey: "HardHighScores")
+                defaults.set(true, forKey: "ReturningUser1")
+                defaults.synchronize()
                 self.OpenMainMenu()
             })
         })
