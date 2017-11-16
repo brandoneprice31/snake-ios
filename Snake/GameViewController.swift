@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 import FBSDKCoreKit
+import GoogleMobileAds
 
 extension SKNode {
     class func unarchiveFromFile(file : String) -> SKNode? {
@@ -44,7 +45,9 @@ extension SKNode {
 
 var viewDelegate : UIViewController!
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GADInterstitialDelegate {
+    
+    private var interstitial: GADInterstitial!
     
     override func loadView() {
         self.view = SKView(frame: UIScreen.main.bounds)
@@ -56,6 +59,8 @@ class GameViewController: UIViewController {
         viewDelegate = self
         
         let currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
+        
+        refreshInterstitial()
 
         if currentUser == nil {
             if let scene = LoginScene.unarchiveFromFile(file: "LoginScene") as? LoginScene {
@@ -90,6 +95,65 @@ class GameViewController: UIViewController {
             }
             
         }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.displayInterstitial), name: NSNotification.Name(rawValue: "displayInterstitialAd"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshInterstitial), name: NSNotification.Name(rawValue: "refreshInterstitialAd"), object: nil)
+        
+    }
+    
+    // Interstitial Ad Helpers
+    
+    func createAndLoadInterstitial() -> GADInterstitial {
+        // testing
+        let Interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+//        // official
+//        let Interstitial = GADInterstitial(adUnitID: "ca-app-pub-5608896664333925/7678122856")
+        Interstitial.delegate = self
+        Interstitial.load(GADRequest())
+        return Interstitial
+    }
+    
+    func displayInterstitial() {
+        if interstitial.isReady {
+            interstitial.present(fromRootViewController: self)
+        } else {
+            refreshInterstitial()
+        }
+    }
+    
+    func refreshInterstitial() {
+        interstitial = createAndLoadInterstitial()
+    }
+    
+    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
+        print("interstitialDidReceiveAd")
+    }
+    
+    func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
+        print("interstitial:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+    
+    func interstitialWillPresentScreen(_ ad: GADInterstitial) {
+        print("interstitialWillPresentScreen")
+    }
+    
+    func interstitialWillDismissScreen(_ ad: GADInterstitial) {
+        print("interstitialWillDismissScreen")
+    }
+    
+    func interstitialDidDismissScreen(_ ad: GADInterstitial) {
+        print("interstitialDidDismissScreen")
+        
+        // start loading another interstitial
+        interstitial = createAndLoadInterstitial()
+    }
+    
+    func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
+        print("interstitialWillLeaveApplication")
     }
 
     /*

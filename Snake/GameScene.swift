@@ -468,6 +468,10 @@ class GameScene: SKScene {
             if NewHighScoresArray.count > 10 {
                 NewHighScoresArray.removeLast()
             }
+            
+        // display ad
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "displayInterstitialAd"), object: nil)
+            
         }
         if defaults.string(forKey: "GameMode") == "Easy" {
             defaults.set(NewHighScoresArray, forKey: "EasyHighScores")
