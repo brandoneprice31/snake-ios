@@ -21,8 +21,13 @@ extension SKNode {
             
             //let currentUser = PFUser.currentUser()
             var currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
+            let defaults = UserDefaults.standard
+            let v3 = defaults.bool(forKey: "V3")
             
-            if currentUser == nil {
+            if currentUser == nil || !v3 {
+                
+                defaults.set(true, forKey: "V3")
+                defaults.synchronize()
                 
                 let scene = archiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as! LoginScene
                 archiver.finishDecoding()
@@ -60,10 +65,16 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         let currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
         
+        let defaults = UserDefaults.standard
+        let v3 = defaults.bool(forKey: "V3")
+        
         refreshInterstitial()
 
-        if currentUser == nil {
+        if currentUser == nil || !v3 {
             if let scene = LoginScene.unarchiveFromFile(file: "LoginScene") as? LoginScene {
+                defaults.set(true, forKey: "V3")
+                defaults.synchronize()
+                
                 // Configure the view.
                 let skView = self.view as! SKView
                 skView.showsFPS = false
@@ -109,9 +120,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     func createAndLoadInterstitial() -> GADInterstitial {
         // testing
-        let Interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
-//        // official
-//        let Interstitial = GADInterstitial(adUnitID: "ca-app-pub-5608896664333925/7678122856")
+        //let Interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+        // official
+        let Interstitial = GADInterstitial(adUnitID: "ca-app-pub-5608896664333925/7678122856")
         Interstitial.delegate = self
         Interstitial.load(GADRequest())
         return Interstitial

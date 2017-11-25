@@ -432,6 +432,9 @@ class GameScene: SKScene {
         
         GamePlaying = "No"
         
+        // display ad
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "displayInterstitialAd"), object: nil)
+        
         // Mark: - Store Score
         var HighScoresArray : [AnyObject]?
         if defaults.string(forKey: "GameMode") == "Easy" {
@@ -468,9 +471,6 @@ class GameScene: SKScene {
             if NewHighScoresArray.count > 10 {
                 NewHighScoresArray.removeLast()
             }
-            
-        // display ad
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "displayInterstitialAd"), object: nil)
             
         }
         if defaults.string(forKey: "GameMode") == "Easy" {
