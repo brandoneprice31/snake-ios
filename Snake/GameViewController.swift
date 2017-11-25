@@ -20,7 +20,7 @@ extension SKNode {
             archiver.setClass(self.classForKeyedUnarchiver(), forClassName: "SKScene")
 
             //let currentUser = PFUser.currentUser()
-            var currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
+            let currentUser = (UIApplication.shared.delegate as! AppDelegate).currentFBToken
             let defaults = UserDefaults.standard
             let v3 = defaults.bool(forKey: "V3")
 
