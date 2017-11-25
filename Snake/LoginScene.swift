@@ -88,7 +88,7 @@ class LoginScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesBegan(Location: location, ButtonList: [FacebookButton,SkipButton])
+            let _ = CheckTouchesBegan(Location: location, ButtonList: [FacebookButton,SkipButton])
         }
     }
     
@@ -96,7 +96,7 @@ class LoginScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesMoved(Location: location, ButtonList: [FacebookButton,SkipButton])
+            let _ = CheckTouchesMoved(Location: location, ButtonList: [FacebookButton,SkipButton])
         }
     }
     
@@ -104,7 +104,7 @@ class LoginScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesLifted(Location: location, ButtonList: [FacebookButton,SkipButton], ActionList: [FacebookButtonClicked,SkipButtonClicked])
+            let _ = CheckTouchesLifted(Location: location, ButtonList: [FacebookButton,SkipButton], ActionList: [FacebookButtonClicked,SkipButtonClicked])
         }
     }
     
@@ -147,7 +147,7 @@ class LoginScene: SKScene {
                     let data = result as! [String : String]
     
                     // We need to create a new user.
-                    API.createUser(firstName: data["first_name"] as! String, lastName: data["last_name"] as! String, fbToken: fbToken, completionHandler: {
+                    API.createUser(firstName: data["first_name"]!, lastName: data["last_name"]!, fbToken: fbToken, completionHandler: {
                         (response, user) in
                         
                         if response != URLResponse.Success {
@@ -157,6 +157,8 @@ class LoginScene: SKScene {
                         let defaults = UserDefaults.standard
                         defaults.set([], forKey: "EasyHighScores")
                         defaults.set([], forKey: "HardHighScores")
+                        defaults.set(true, forKey: "ReturningUser1")
+                        defaults.synchronize()
                         self.OpenMainMenu()
                     })
                 })
@@ -178,6 +180,8 @@ class LoginScene: SKScene {
                 let defaults = UserDefaults.standard
                 defaults.set(syncedEasyHS!, forKey: "EasyHighScores")
                 defaults.set(syncedHardHS, forKey: "HardHighScores")
+                defaults.set(true, forKey: "ReturningUser1")
+                defaults.synchronize()
                 self.OpenMainMenu()
             })
         })
@@ -194,7 +198,7 @@ class LoginScene: SKScene {
         SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(LoginScene.SpawnSquare), userInfo: nil, repeats: true)
     }
     
-    func SpawnSquare () {
+    @objc func SpawnSquare () {
         let Square = BackgroundSquare(width: Width, height: Height, xMin: xMin, yMin: yMin)
         self.addChild(Square)
     }

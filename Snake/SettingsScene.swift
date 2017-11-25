@@ -133,12 +133,12 @@ class SettingsScene: SKScene {
             
             if PopUpIsUp == "No" {
                 
-                CheckTouchesBegan(Location: location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
+                let _ = CheckTouchesBegan(Location: location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
 
             }
             else {
                 
-                CheckTouchesBegan(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton])
+                let _ = CheckTouchesBegan(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton])
                 
             }
         }
@@ -150,12 +150,12 @@ class SettingsScene: SKScene {
             
             if PopUpIsUp == "No" {
                 // Moved away from all the buttons
-                CheckTouchesMoved(Location: location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
+                let _ = CheckTouchesMoved(Location: location, ButtonList: [MainMenuButton,PlayButton,GameModeButton,ClearHighScoreButton,FacebookConnectButton])
                 
             }
             else {
                 
-                CheckTouchesMoved(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton])
+                let _ = CheckTouchesMoved(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton])
                 
             }
         }
@@ -167,7 +167,7 @@ class SettingsScene: SKScene {
             
             if PopUpIsUp == "No" {
                 
-                CheckTouchesLifted(Location: location, ButtonList: [MainMenuButton,PlayButton,ClearHighScoreButton,FacebookConnectButton], ActionList: [OpenMainMenu,PlayGame,ClearHighScores,FacebookConnect])
+                let _ = CheckTouchesLifted(Location: location, ButtonList: [MainMenuButton,PlayButton,ClearHighScoreButton,FacebookConnectButton], ActionList: [OpenMainMenu,PlayGame,ClearHighScores,FacebookConnect])
                 
                 if CheckTouchesLifted(Location: location, ButtonList: [GameModeButton], ActionList: [ChangeGameMode]) {
                     GameModeButton.color = LightColor
@@ -177,7 +177,7 @@ class SettingsScene: SKScene {
             }
             else {
                 
-                CheckTouchesLifted(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton], ActionList: [PopUpYesButtonClicked,PopUpNoButtonClicked])
+                let _ = CheckTouchesLifted(Location: location, ButtonList: [PopUpYesButton,PopUpNoButton], ActionList: [PopUpYesButtonClicked,PopUpNoButtonClicked])
             }
         }
     }
@@ -313,12 +313,12 @@ class SettingsScene: SKScene {
     }
     
     func StartBackgroundDesign () {
-        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: Selector("SpawnSquare"), userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(SettingsScene.SpawnSquare), userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: Selector("SpawnSquare"), userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(SettingsScene.SpawnSquare), userInfo: nil, repeats: true)
     }
     
-    func SpawnSquare () {
+    @objc func SpawnSquare () {
         let Square = BackgroundSquare(width: Width, height: Height, xMin: xMin, yMin: yMin)
         self.addChild(Square)
     }

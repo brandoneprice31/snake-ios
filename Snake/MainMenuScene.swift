@@ -74,7 +74,7 @@ class MainMenuScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesBegan(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
+            let _ = CheckTouchesBegan(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
             
         }
     }
@@ -83,7 +83,7 @@ class MainMenuScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesMoved(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
+            let _ = CheckTouchesMoved(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton])
 
         }
     }
@@ -92,7 +92,7 @@ class MainMenuScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesLifted(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton], ActionList: [OpenHighScores,PlayGame,OpenSettings,OpenHowToPlay])
+            let _ = CheckTouchesLifted(Location: location, ButtonList: [HighScoresButton,PlayButton,SettingsButton,HowToPlayButton], ActionList: [OpenHighScores,PlayGame,OpenSettings,OpenHowToPlay])
             
         }
     }
@@ -122,12 +122,12 @@ class MainMenuScene: SKScene {
     }
     
     func StartBackgroundDesign () {
-        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(MainMenuScene.SpawnSquare), userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(MainMenuScene.SpawnSquare), userInfo: nil, repeats: true)
     }
     
-    func SpawnSquare () {
+    @objc func SpawnSquare () {
         let Square = BackgroundSquare(width: Width, height: Height, xMin: xMin, yMin: yMin)
         Square.zPosition = -10
         self.addChild(Square)

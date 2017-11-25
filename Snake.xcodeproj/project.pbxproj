@@ -31,7 +31,7 @@
 		A82A47D21C062AEF00E0DCDD /* LoginScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A82A47D11C062AEF00E0DCDD /* LoginScene.sks */; };
 		A82A47D41C0679F200E0DCDD /* ListFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82A47D31C0679F200E0DCDD /* ListFunctions.swift */; };
 		A84B0EF61F8C59050018B3AD /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84B0EF51F8C59050018B3AD /* API.swift */; };
-		A84B0EF81F8C59ED0018B3AD /* user.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84B0EF71F8C59ED0018B3AD /* user.swift */; };
+		A84B0EF81F8C59ED0018B3AD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84B0EF71F8C59ED0018B3AD /* User.swift */; };
 		A8BE37C71BEA95250042CAAB /* TouchFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE37C61BEA95250042CAAB /* TouchFunctions.swift */; };
 		A8BE37C91BEACEEF0042CAAB /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE37C81BEACEEF0042CAAB /* ButtonNode.swift */; };
 /* End PBXBuildFile section */
@@ -75,7 +75,7 @@
 		A82A47D11C062AEF00E0DCDD /* LoginScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LoginScene.sks; sourceTree = "<group>"; };
 		A82A47D31C0679F200E0DCDD /* ListFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListFunctions.swift; sourceTree = "<group>"; };
 		A84B0EF51F8C59050018B3AD /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
-		A84B0EF71F8C59ED0018B3AD /* user.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = user.swift; sourceTree = "<group>"; };
+		A84B0EF71F8C59ED0018B3AD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A8BE37C61BEA95250042CAAB /* TouchFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchFunctions.swift; sourceTree = "<group>"; };
 		A8BE37C81BEACEEF0042CAAB /* ButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		BC0CBE5174B0AA8F6760406A /* Pods-Snake.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Snake.release.xcconfig"; path = "Pods/Target Support Files/Pods-Snake/Pods-Snake.release.xcconfig"; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		5A8BE2581B99FC1600BD4374 /* Snake */ = {
 			isa = PBXGroup;
 			children = (
-				A8BE37CE1BEBE9F50042CAAB /* Libraries */,
+				A8BE37CE1BEBE9F50042CAAB /* Lib */,
 				A8BE37CC1BEBE9790042CAAB /* Nodes */,
 				A8BE37CD1BEBE9BD0042CAAB /* Scenes */,
 				A8BE37CA1BEBE9480042CAAB /* SKS */,
@@ -143,7 +143,6 @@
 				5A8BE2681B99FC1600BD4374 /* LaunchScreen.xib */,
 				5A8BE2911B99FDC500BD4374 /* Images.xcassets */,
 				5A8BE2591B99FC1600BD4374 /* Supporting Files */,
-				A84B0EF71F8C59ED0018B3AD /* user.swift */,
 			);
 			path = Snake;
 			sourceTree = "<group>";
@@ -219,13 +218,14 @@
 			name = Scenes;
 			sourceTree = "<group>";
 		};
-		A8BE37CE1BEBE9F50042CAAB /* Libraries */ = {
+		A8BE37CE1BEBE9F50042CAAB /* Lib */ = {
 			isa = PBXGroup;
 			children = (
 				A8BE37C61BEA95250042CAAB /* TouchFunctions.swift */,
 				A82A47D31C0679F200E0DCDD /* ListFunctions.swift */,
+				A84B0EF71F8C59ED0018B3AD /* User.swift */,
 			);
-			name = Libraries;
+			name = Lib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -393,7 +393,7 @@
 				5A8BE28F1B99FDC000BD4374 /* Block.swift in Sources */,
 				A8BE37C71BEA95250042CAAB /* TouchFunctions.swift in Sources */,
 				5A8BE2901B99FDC000BD4374 /* Food.swift in Sources */,
-				A84B0EF81F8C59ED0018B3AD /* user.swift in Sources */,
+				A84B0EF81F8C59ED0018B3AD /* User.swift in Sources */,
 				5A8BE28C1B99FDB900BD4374 /* GameViewController.swift in Sources */,
 				A82A47D41C0679F200E0DCDD /* ListFunctions.swift in Sources */,
 				A82A47D01C062AAD00E0DCDD /* LoginScene.swift in Sources */,
@@ -554,7 +554,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.BrandonPrice.Snake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -576,7 +576,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.BrandonPrice.Snake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
