@@ -127,26 +127,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         Interstitial.load(GADRequest())
         return Interstitial
     }
-<<<<<<< HEAD
-
-    func displayInterstitial() {
-=======
 
     @objc func displayInterstitial() {
->>>>>>> removed warnings
         if interstitial.isReady {
             interstitial.present(fromRootViewController: self)
         } else {
             refreshInterstitial()
         }
     }
-<<<<<<< HEAD
-
-    func refreshInterstitial() {
-=======
-
     @objc func refreshInterstitial() {
->>>>>>> removed warnings
         interstitial = createAndLoadInterstitial()
     }
 
