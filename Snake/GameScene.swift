@@ -169,7 +169,7 @@ class GameScene: SKScene {
                 }
                 else if abs(UpAxis) <= 15 && abs(RightAxis) <= 15 {
                     DoubleTap += 1
-                    DoubleTapTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: "NoDoubleTap", userInfo: nil, repeats: false)
+                    DoubleTapTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(GameScene.NoDoubleTap), userInfo: nil, repeats: false)
                 }
                 
                 if DoubleTap == 2 {
@@ -179,11 +179,11 @@ class GameScene: SKScene {
             else {
                 
                 if GamePlaying == "Paused" {
-                    CheckTouchesLifted(Location: location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [ContinueGame,OpenMainMenu])
+                    let _ = CheckTouchesLifted(Location: location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [ContinueGame,OpenMainMenu])
                 }
                 else {
-                    
-                    CheckTouchesLifted(Location: location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [PlayAgain,OpenMainMenu])
+                
+                    let _ = CheckTouchesLifted(Location: location, ButtonList: [PlayAgainButton,MainMenuButton], ActionList: [PlayAgain,OpenMainMenu])
                 }
             }
         }
@@ -232,7 +232,7 @@ class GameScene: SKScene {
     }
     
     // MARK: - MoveSnake function
-    func MoveSnake () {
+    @objc func MoveSnake () {
         if BlockArray.count > 0 {
             if Direction == "Left" {
                 let NewX = BlockArray[0].Coordinates.x - 1
@@ -442,13 +442,13 @@ class GameScene: SKScene {
             if defaults.array(forKey: "EasyHighScores") == nil {
                 defaults.set([], forKey: "EasyHighScores")
             }
-            HighScoresArray = defaults.array(forKey: "EasyHighScores") as! [AnyObject]
+            HighScoresArray = defaults.array(forKey: "EasyHighScores")! as [AnyObject]
         }
         else {
             if defaults.array(forKey: "HardHighScores") == nil {
                 defaults.set([], forKey: "HardHighScores")
             }
-            HighScoresArray = defaults.array(forKey: "HardHighScores") as! [AnyObject]
+            HighScoresArray = defaults.array(forKey: "HardHighScores")! as [AnyObject]
         }
         var NewHighScoresArray = [AnyObject]()
         
@@ -525,7 +525,7 @@ class GameScene: SKScene {
         self.scene!.view?.presentScene(mainMenuScene, transition: transition)
     }
     
-    func NoDoubleTap () {
+    @objc func NoDoubleTap () {
         DoubleTap = 0
     }
     
@@ -600,7 +600,7 @@ class GameScene: SKScene {
         else if defaults.string(forKey: "GameMode") == "Hard" && AmountOfBlocks <= 200 && AmountOfBlocks % 10 == 0 {
             SnakeTimer.invalidate()
             Time_Interval = Time_Interval * 0.97
-            SnakeTimer = Timer.scheduledTimer(timeInterval: Time_Interval, target: self, selector: "MoveSnake", userInfo: nil, repeats: true)
+            SnakeTimer = Timer.scheduledTimer(timeInterval: Time_Interval, target: self, selector: #selector(GameScene.MoveSnake), userInfo: nil, repeats: true)
         }
     }
 

@@ -80,7 +80,7 @@ class HowToPlayScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesBegan(Location: location, ButtonList: [MainMenuButton,PlayButton])
+            let _ = CheckTouchesBegan(Location: location, ButtonList: [MainMenuButton,PlayButton])
         }
     }
     
@@ -88,7 +88,7 @@ class HowToPlayScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesMoved(Location: location, ButtonList: [MainMenuButton,PlayButton])
+            let _ = CheckTouchesMoved(Location: location, ButtonList: [MainMenuButton,PlayButton])
         }
     }
     
@@ -96,7 +96,7 @@ class HowToPlayScene: SKScene {
         for touch in (touches ) {
             let location = touch.location(in: self)
             
-            CheckTouchesLifted(Location: location, ButtonList: [MainMenuButton,PlayButton], ActionList: [OpenMainMenu,PlayGame])
+            let _ = CheckTouchesLifted(Location: location, ButtonList: [MainMenuButton,PlayButton], ActionList: [OpenMainMenu,PlayGame])
         }
     }
         
@@ -117,10 +117,10 @@ class HowToPlayScene: SKScene {
     func StartBackgroundDesign () {
         SpawnBackgroundSquaresTimer1 = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(HowToPlayScene.SpawnSquare), userInfo: nil, repeats: true)
         
-        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: "SpawnSquare", userInfo: nil, repeats: true)
+        SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(HowToPlayScene.SpawnSquare), userInfo: nil, repeats: true)
     }
     
-    func SpawnSquare () {
+    @objc func SpawnSquare () {
         let Square = BackgroundSquare(width: Width, height: Height, xMin: xMin, yMin: yMin)
         self.addChild(Square)
     }

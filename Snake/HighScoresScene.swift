@@ -9,7 +9,7 @@
 import SpriteKit
 import FBSDKCoreKit
 
-let Pi = CGFloat(M_PI)
+let Pi = CGFloat(Double.pi)
 
 class HighScoresScene: SKScene {
     
@@ -284,7 +284,7 @@ class HighScoresScene: SKScene {
                 DisplayedScore = "\(theScore)"
                 DisplayedName = scoreArr[rank-1]["name"] as! String
                 
-                if DisplayedName.characters.count > 24 {
+                if DisplayedName.count > 24 {
                     // Fix this
                     let i = DisplayedName.index(DisplayedName.startIndex, offsetBy: 24)
                     DisplayedName = String(DisplayedName[..<i])
@@ -334,7 +334,7 @@ class HighScoresScene: SKScene {
         SpawnBackgroundSquaresTimer2 = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(HighScoresScene.SpawnSquare), userInfo: nil, repeats: true)
     }
     
-    func SpawnSquare () {
+    @objc func SpawnSquare () {
         let Square = BackgroundSquare(width: Width, height: Height, xMin: xMin, yMin: yMin)
         self.addChild(Square)
     }
@@ -346,20 +346,11 @@ class HighScoresScene: SKScene {
     
     func LoadScores () {
         
-        var GameModeScore = String()
-        
-        if self.defaults.string(forKey: "GameMode") == "Easy" {
-            GameModeScore = "EasyHighScores"
-        }
-        else {
-            GameModeScore = "HardHighScores"
-        }
-        
         // Get Friend List
         
         
         let fbRequest = FBSDKGraphRequest(graphPath:"/me/friends", parameters: nil)
-        fbRequest?.start(completionHandler: {
+        let _ = fbRequest?.start(completionHandler: {
             (connection, result, error) in
             if error == nil {
                 
@@ -387,7 +378,7 @@ class HighScoresScene: SKScene {
                         return dict
                     })
                     
-                    self.nameScoreArr += [["name": "You", "score": (self.HighScoresArray as! [Int]).max() == nil ? 0 : (self.HighScoresArray as! [Int]).max()]]
+                    self.nameScoreArr += [["name": "You", "score": (self.HighScoresArray as! [Int]).max() == nil ? 0 : (self.HighScoresArray as! [Int]).max() as Any]]
                     
                     if self.Mode == "Friends" {
                         self.FriendsButtonClicked()
